@@ -9,24 +9,32 @@ import numpy as np
 import tensorflow as tf
 import os
 from google.cloud import translate_v2 as translate
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 
 # Enable Logging
 logging.basicConfig(level=logging.INFO)
 
-# Load 2Factor API Key
-TWOFACTOR_API_KEY = "a07a23ed-f513-11ef-8b17-0200cd936042"
+# Load API Key from .env file
+TWOFACTOR_API_KEY = os.getenv("TWOFACTOR_API_KEY")
 
 if not TWOFACTOR_API_KEY:
-    logging.error("2Factor API key is missing! Set it as an environment variable.")
+    logging.error("2Factor API key is missing! Set it in the .env file.")
 
 # Store OTPs temporarily (Use DB for production)
 otp_store = {}
 
 # Load the trained Keras model
 MODEL_PATH = "prediction_model.h5"
-keras_model = tf.keras.models.load_model(MODEL_PATH)
+
+if os.path.exists(MODEL_PATH):
+    keras_model = tf.keras.models.load_model(MODEL_PATH)
+else:
+    logging.error(f"Model file {MODEL_PATH} not found!")
 
 # Define the input image size (must match the model's input size)
 IMG_SIZE = (224, 224)
@@ -154,73 +162,6 @@ def fertilizers_recommendation():
     except Exception as e:
         return jsonify({"error": f"Failed to Extract Description: {str(e)}"}), 500
 
-@app.route('/cropRecommendation', methods=['POST'])
-def crop_recommendation():
-    data = request.json
-    latitude = data.get("latitude")
-    longitude = data.get("longitude")
-    _ismanual = data.get("_ismanual")
-    manual_data = data.get("manual_data")
-
-    try:
-        weather_data = utils.get_today_forecast(latitude, longitude)
-
-        if not _ismanual:
-            Csoil_data = {
-                'P': 131.5,
-                'N': 221,
-                'K': 78.9,
-                'ph': 7.0,
-                'Temperature (°C)': weather_data['today']['Temperature (°C)'],
-                'Humidity (%)': weather_data['today']['Humidity (%)'],
-                'Rainfall (mm)': weather_data['today']['Rainfall (mm)']
-            }
-        else:
-            Csoil_data = {
-                'P': manual_data['P'],
-                'N': manual_data['N'],
-                'K': manual_data['K'],
-                'ph': manual_data['ph'],
-                'Temperature (°C)': manual_data['Temperature (°C)'],
-                'Humidity (%)': manual_data['Humidity (%)'],
-                'Rainfall (mm)': manual_data['Rainfall (mm)']
-            }
-
-        CropRecommend = ml_function.give_crop(latitude, longitude, Csoil_data)
-
-        if 'error' in CropRecommend:
-            return jsonify(CropRecommend), 500
-        
-        return jsonify(CropRecommend)
-    except Exception as e:
-        return jsonify({"error": f"Failed to Extract Description: {str(e)}"}), 500
-
-@app.route('/predicttodayWeather', methods=['POST'])
-def predict_today_weather():
-    data = request.json
-    latitude = data.get("latitude")
-    longitude = data.get("longitude")
-    try:
-        weather_data = utils.get_today_forecast(latitude, longitude)
-        if 'error' in weather_data:
-            return jsonify(weather_data), 500
-        return jsonify(weather_data)
-    except Exception as e:
-        return jsonify({"error": f"Failed to Extract Weather: {str(e)}"}), 500
-
-@app.route('/predictforecastWeather', methods=['POST'])
-def predict_forecast_weather():
-    data = request.json
-    latitude = data.get("latitude")
-    longitude = data.get("longitude")
-    try:
-        weather_data_f = utils.get_weather_forecast(latitude, longitude)
-        if 'error' in weather_data_f:
-            return jsonify(weather_data), 500
-        return jsonify(weather_data_f)
-    except Exception as e:
-        return jsonify({"error": f"Failed to Extract Weather: {str(e)}"}), 500
-
 @app.route('/predict', methods=['POST'])
 def predict():
     if "image" not in request.files:
@@ -237,10 +178,12 @@ def predict():
         file.save(filepath)
 
         image = preprocess_image(filepath)
-        prediction = keras_model.predict(image)
-        predicted_class = np.argmax(prediction, axis=1)[0]
-
-        return jsonify({"predicted_class": int(predicted_class)})
+        if keras_model:
+            prediction = keras_model.predict(image)
+            predicted_class = np.argmax(prediction, axis=1)[0]
+            return jsonify({"predicted_class": int(predicted_class)})
+        else:
+            return jsonify({"error": "Model is not loaded properly"}), 500
     else:
         return jsonify({"error": "Invalid file type"}), 400
     
