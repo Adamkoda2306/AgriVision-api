@@ -12,4 +12,4 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Run the application with Gunicorn
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:${PORT}", "app:app"]
+CMD ["sh", "-c", "gunicorn -w 4 -b 0.0.0.0:$PORT app:app"]
