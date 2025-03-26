@@ -6,22 +6,25 @@ import os
 from AgriVision.source import ml_function, utils
 from googletrans import Translator
 
-app = Flask(__name__)
-
-translator = Translator()
-
-# Load the ONNX model
+# Load the ONNX model before initializing the app
 MODEL_PATH = "prediction_model.onnx"
+session = None
+input_name = None
+output_name = None
+
 try:
     session = ort.InferenceSession(MODEL_PATH, providers=["CPUExecutionProvider"])
     input_name = session.get_inputs()[0].name
     output_name = session.get_outputs()[0].name
+    print("ONNX model loaded successfully.")
 except Exception as e:
     print(f"Failed to load ONNX model: {e}")
-    session = None
 
 IMG_SIZE = (224, 224)
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
+
+app = Flask(__name__)
+translator = Translator()
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -39,6 +42,8 @@ def preprocess_image(image_path):
         return None
 
 def predict_onnx(image):
+    if session is None:
+        return None  # Ensure model is loaded
     try:
         outputs = session.run([output_name], {input_name: image})
         return np.argmax(outputs[0], axis=1)[0]
