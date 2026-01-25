@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./dist",
 
-    "module": "nodenext",
+    "module": "commonjs",
     "target": "es2022",
     "lib": ["es2022"],
     "types": ["node", "jest"],
@@ -12,9 +12,8 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node",
 
-    "isolatedModules": true,
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true
   },
