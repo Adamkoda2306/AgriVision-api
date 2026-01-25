@@ -1,5 +1,7 @@
 import { client } from "../config/twilio.config";
 
+
+// -------------------- SEND OTP UTILS ---------------------------------
 export const sendOTP = async (details: { phonenumber: string, otp: string }): Promise<{ success: boolean, message: string }> => {
     const { phonenumber, otp } = details;
     const recipientPhone: string = phonenumber.startsWith("+91") ? phonenumber : `+91${phonenumber}`;
