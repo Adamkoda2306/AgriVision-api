@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// ---------- DATABASE CONNECTION -----------
 const connectDB = async (): Promise<void> => {
   try {
     if (process.env.NODE_ENV === "test") {
