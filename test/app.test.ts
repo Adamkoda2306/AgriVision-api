@@ -1,6 +1,8 @@
 import request from 'supertest';
 import app from "../app";
 
+
+// ------------- DEFAULT CASE TESTING -------------------------
 describe("API Tests", () => {
     it("Server Started", async () => {
         const res = await request(app).get('/');
