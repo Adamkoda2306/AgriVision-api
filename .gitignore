@@ -1,2 +1,63 @@
-env/
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Output folders
+# dist/
+build/
+
+# TypeScript
+*.tsbuildinfo
+
+# Env files
 .env
+.env.test
+.env.local
+.env.production
+
+# Logs
+logs/
+*.log
+
+# Coverage (from Jest)
+coverage/
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.pyo
+*.pyd
+*.log
+
+# Python virtual environments
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# PyInstaller
+*.spec
+
+# VSCode/IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS junk
+.DS_Store
+Thumbs.db
