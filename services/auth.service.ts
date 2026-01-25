@@ -4,6 +4,8 @@ import { User } from '../models/user.model';
 import { sendOTP } from "../utils/otp.utils";
 import generateToken from "../utils/jwt.utils";
 
+
+// ----------------- LOGIN SERVICE -------------------------
 const login = async (phonenumber: string): Promise<{statusCode: number, success: boolean, message: string}> => {
     try {
         let otp: string;
@@ -57,6 +59,7 @@ const login = async (phonenumber: string): Promise<{statusCode: number, success:
 };
 
 
+// ----------------- VERIFY SERVICE -------------------------
 const verify = async (details: { phonenumber: string, otp: string }): Promise<{ statusCode: number, success: boolean, message: string, token?: string}> => {
     const { phonenumber, otp } = details;
     try {
@@ -83,6 +86,7 @@ const verify = async (details: { phonenumber: string, otp: string }): Promise<{ 
 };
 
 
+// ----------------- RESEND OTP SERVICE -------------------------
 const resendOTP = async (phonenumber: string): Promise<{ statusCode: number, success: boolean, message: string}> => {
     try {
         const testNumbers = ["7780706694", "7842487664"];
