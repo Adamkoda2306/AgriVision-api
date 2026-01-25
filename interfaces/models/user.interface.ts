@@ -1,10 +1,14 @@
 import { Document } from "mongoose";
 
+
+// ------- HISTORY INTERFACE ------------
 export interface IHistory {
     id: string;
     issue: Date;
 }
 
+
+// ------- USER INTERFACE --------------
 export interface IUser extends Document {
     id: string;
     phonenumber: string;

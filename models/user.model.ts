@@ -2,6 +2,7 @@ import { Schema, model } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import { IUser } from "../interfaces/models/user.interface";
 
+// --------- USER SCHEMA -------------
 const UserSchema = new Schema<IUser>({
     id: {
         type: String,
