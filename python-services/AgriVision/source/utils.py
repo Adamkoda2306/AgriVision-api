@@ -459,7 +459,7 @@ if __name__ == "__main__":
     soil = get_soil_data(LAT, LON)
     check(isinstance(soil, dict) and len(soil) > 0, "Soil chain returned a dict")
     check(all(k in soil for k in ("ph", "N", "P", "K", "cec")), "All keys present (ph, N, P, K, cec)")
-    if soil.get("source") == "GEE OpenLandMap 250m":
+    if "GEE" in str(soil.get("source", "")):
         ok(f"Tier 1 (GEE) — ph={soil.get('ph')}, N={soil.get('N')}, cec={soil.get('cec')}")
     elif "warning" in soil:
         warn(f"Fallback used: {soil['warning']}")
