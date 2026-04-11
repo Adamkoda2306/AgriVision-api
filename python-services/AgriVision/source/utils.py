@@ -352,7 +352,7 @@ def get_disease_info(disease_input):
         code = None
         crop = None
         for part in parts[1:]:
-            if part in ('P', 'A'):  # Disease type codes
+            if part in ('P','A'):  # Disease type codes
                 code = part
             else:
                 crop = part
