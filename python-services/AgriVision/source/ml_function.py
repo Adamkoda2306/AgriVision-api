@@ -35,10 +35,11 @@ def load_model(model_path=None):
     try:
         return joblib.load(model_path)
     except FileNotFoundError:
-        print(f"❌ Model file not found at: {model_path}")
+        # print(f"❌ Model file not found at: {model_path}")
         raise
     except Exception as e:
-        print(f"❌ Error loading model: {e}")
+        # print(f"❌ Error loading model: {e}")
+        return None
 
 def evaluate_model(clf, X_test, y_test, classes):
     y_pred = clf.predict(X_test)

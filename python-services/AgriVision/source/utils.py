@@ -35,7 +35,7 @@ def _init_gee():
         ee.Initialize(credentials)
         return True
     except Exception as e:
-        print(f"GEE init failed: {e}")
+        # print(f"GEE init failed: {e}")
         return False
 
 _GEE_READY = _init_gee()
@@ -146,7 +146,7 @@ def _try_gee(lat, lon):
             "source": "GEE OpenLandMap 250m (P/K from regional avg)",
         }
     except Exception as e:
-        print(f"GEE soil query failed: {e}")
+        # print(f"GEE soil query failed: {e}")
         return None
 
 
@@ -435,6 +435,7 @@ def clean_response(text):
     for phrase in unwanted_phrases:
         text = text.replace(phrase, '')
     return text.strip()
+
 if __name__ == "__main__":
     LAT, LON = 13.6288, 79.4192
  
