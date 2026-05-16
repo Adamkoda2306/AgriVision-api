@@ -33,7 +33,7 @@ const authMiddleware = async (
       const user = await User.findOne({ id: decoded.id });
       if (user) {
         req.user = decoded;
-        next();
+        return next();
       } else {
         throw new Error('User not found in the decoded token');
       }
