@@ -46,12 +46,15 @@ const login = async (phonenumber: string): Promise<{statusCode: number, success:
                 throw err;
             }
         }
-        const result: { success: boolean, message: string } = await sendOTP({ phonenumber, otp});
-        if (result.success) {
-            return { statusCode: 200, success: true, message: "Successfully sent OTP to the registered mobile number." };
-        } else {
-            throw new Error('Twilio Service unable to send the OTP.');
+        if (!testNumbers.includes(phonenumber)) {
+            const result: { success: boolean, message: string } = await sendOTP({ phonenumber, otp});
+            if (result.success) {
+                return { statusCode: 200, success: true, message: "Successfully sent OTP to the registered mobile number." };
+            } else {
+                throw new Error('Twilio Service unable to send the OTP.');
+            }
         }
+        return { statusCode: 200, success: true, message: "Successfully sent OTP to the registered mobile number." };
     } catch (err: any) {
         console.error(`Error at Login Service, reason: ${err.message}`);
         return { statusCode: 500, success: false, message: "Internal Server Error" };
