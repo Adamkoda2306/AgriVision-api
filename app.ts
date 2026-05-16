@@ -5,8 +5,9 @@ import connectDB from './config/db.config';
 
 // ----------------- ROUTES IMPORTS -----------------
 import authRoutes from "./routes/auth.routes";
-// import recommendRoutes from "./routes/recommend.routes";
-// import predictionRoutes from "./routes/predict.routes";
+import recommendRoutes from "./routes/recommend.routes";
+import predictionRoutes from "./routes/prediction.routes";
+import environmentRoutes from "./routes/environment.routes";
 
 const app = express();
 
@@ -52,7 +53,8 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 // ----------------- ACTUAL ROUTES -----------------
 app.use("/auth", authRoutes);
-// app.use("/api/predict", predictionRoutes);
-// app.use("/api/recommend", recommendRoutes);
+app.use("/api/predict", predictionRoutes);
+app.use("/api/recommend", recommendRoutes);
+app.use("/api/environment", environmentRoutes);
 
 export default app;
