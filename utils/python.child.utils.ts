@@ -41,11 +41,12 @@ export const runAgriVisionPrediction = (
   requestType: string,
   params: RequestParams
 ): Promise<PredictionResult> => {
-  const baseDir = getDir();
   const scriptPath = path.resolve(
-    baseDir,
-    "../python-services/AgriVision/usage.py"
-  );
+    process.cwd(),
+    "python-services",
+    "AgriVision",
+    "usage.py"
+);
 
   return new Promise((resolve, reject) => {
     const pythonProcess: ChildProcess = spawn("python3", [
