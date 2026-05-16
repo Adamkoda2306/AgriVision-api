@@ -15,7 +15,6 @@ const PredictionSchema = new Schema<IPrediciton>({
     },
 
     predicted_disease: { type: String },
-    image_url: { type: String }, 
 
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now }
