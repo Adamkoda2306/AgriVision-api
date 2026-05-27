@@ -10,7 +10,7 @@ const getCrop = async (details: { data: ICrop }): Promise<
         if (!data) {
             return { statusCode: 400, success: false, message: "No Land Details are Sent!!" };
         }
-        const result: { success?: boolean; data?: any; error?: string } = await getCropRecommendation( data.latitude, data.longitude, data.manual_data );
+        const result: { success?: boolean; data?: any; error?: string } = await getCropRecommendation( data.latitude, data.longitude );
         console.log(result);
         if (!result.success) {
             return { statusCode: 400, success: false, message: "Failed to Get Recommended Crop!" };

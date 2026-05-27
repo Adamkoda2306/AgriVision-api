@@ -5,19 +5,18 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="sklearn")
 
 
-def get_crop_recommendation(lat, lon, manual_data):
+def get_crop_recommendation(lat, lon):
     """
     Get crop recommendation based on location and manual data.
     Args:
         lat (float): Latitude coordinate
         lon (float): Longitude coordinate
-        manual_data (dict): Manual input data
     Returns:
         dict: Crop recommendation result
     """
     try:
         model_bundle = ml_function.load_model()
-        result = ml_function.give_crop(lat, lon, manual_data=manual_data)
+        result = ml_function.give_crop(lat, lon, manual_data=get_land_data(lat, lon))
         return {"success": True, "data": result}
     except Exception as e:
         return {"success": False, "error": str(e)}

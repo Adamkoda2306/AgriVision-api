@@ -92,13 +92,11 @@ export const runAgriVisionPrediction = (
  */
 export const getCropRecommendation = (
   lat: number,
-  lon: number,
-  manual_data: Record<string, any>
+  lon: number
 ): Promise<PredictionResult> => {
   return runAgriVisionPrediction("crop", {
     lat,
-    lon,
-    manual_data
+    lon
   });
 };
 
