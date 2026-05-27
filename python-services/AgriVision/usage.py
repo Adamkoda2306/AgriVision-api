@@ -117,8 +117,7 @@ def process_request(request_type, params):
         if request_type == "crop":
             return get_crop_recommendation(
                 params.get("lat"),
-                params.get("lon"),
-                params.get("manual_data")
+                params.get("lon")
             )
         elif request_type == "weather":
             return get_weather(params.get("lat"), params.get("lon"))
