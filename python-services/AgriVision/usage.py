@@ -16,7 +16,8 @@ def get_crop_recommendation(lat, lon):
     """
     try:
         model_bundle = ml_function.load_model()
-        result = ml_function.give_crop(lat, lon, manual_data=get_land_data(lat, lon))
+        soil_data = get_land_data(lat, lon)
+        result = ml_function.give_crop(lat, lon, manual_data=soil_data)
         return {"success": True, "data": result}
     except Exception as e:
         return {"success": False, "error": str(e)}
