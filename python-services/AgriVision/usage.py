@@ -1,6 +1,6 @@
 import json
 import sys
-from source import ml_function, utils
+from source import ml_function, utils, disease_info
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="sklearn")
 
@@ -99,7 +99,7 @@ def get_disease_prediction(crop_disease):
         dict: Disease information
     """
     try:
-        result = utils.get_disease_info(crop_disease)
+        result = disease_info.get_disease_info(crop_disease)
         return {"success": True, "data": result}
     except Exception as e:
         return {"success": False, "error": str(e)}
