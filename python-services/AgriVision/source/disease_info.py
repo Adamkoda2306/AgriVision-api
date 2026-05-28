@@ -169,7 +169,7 @@ def get_ai_response(prompt: str) -> str:
     payload = {
         "model": "Qwen/Qwen2.5-72B-Instruct",
         "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": 400,
+        "max_tokens": 4000,
         "temperature": 0.6,
     }
     try:
@@ -177,7 +177,7 @@ def get_ai_response(prompt: str) -> str:
             "https://router.huggingface.co/v1/chat/completions",
             json=payload,
             headers=headers,
-            timeout=60,
+            timeout=120,
         )
         if response.status_code == 401:
             return "Error: Invalid HuggingFace token."
@@ -367,6 +367,7 @@ Make sure:
         # Check for errors
         if "Error:" in ai_response:
             return {"error": ai_response}
+        # print(f"[RAW AI RESPONSE]\n{ai_response}\n{'='*60}") 
         
         # Parse response to JSON
         parsed_response = parse_ai_response_to_json(ai_response)
@@ -396,12 +397,12 @@ if __name__ == "__main__":
     result = get_disease_info("Cedar Apple Rust (Apple)")  # Apple Scab
     print(json.dumps(result, indent=2, ensure_ascii=False))
     
-    # Healthy plant
-    result_healthy = get_disease_info("Healthy (Blueberry)")  # Healthy (Apple)
-    print("\n" + "="*50)
-    print(json.dumps(result_healthy, indent=2, ensure_ascii=False))
+    # # Healthy plant
+    # result_healthy = get_disease_info("Healthy (Blueberry)")  # Healthy (Apple)
+    # print("\n" + "="*50)
+    # print(json.dumps(result_healthy, indent=2, ensure_ascii=False))
     
-    # No leaf found
-    result_no_leaf = get_disease_info("No Leaf Found")  # No Leaf Found
-    print("\n" + "="*50)
-    print(json.dumps(result_no_leaf, indent=2, ensure_ascii=False))
+    # # No leaf found
+    # result_no_leaf = get_disease_info("No Leaf Found")  # No Leaf Found
+    # print("\n" + "="*50)
+    # print(json.dumps(result_no_leaf, indent=2, ensure_ascii=False))
