@@ -9,7 +9,7 @@ import generateToken from "../utils/jwt.utils";
 const login = async (phonenumber: string): Promise<{statusCode: number, success: boolean, message: string}> => {
     try {
         let otp: string;
-        const testNumbers = [ "7780706694", "7842487664" ];
+        const testNumbers = [ "9000000000", "7842487664" ];
         otp = testNumbers.includes(phonenumber) ? "12345" : (crypto.randomInt(10000, 99999)).toString();
         const expiry: Date = new Date(Date.now() + 3 * 60 * 1000);
         const user = await User.findOneAndUpdate(
@@ -92,7 +92,7 @@ const verify = async (details: { phonenumber: string, otp: string }): Promise<{ 
 // ----------------- RESEND OTP SERVICE -------------------------
 const resendOTP = async (phonenumber: string): Promise<{ statusCode: number, success: boolean, message: string}> => {
     try {
-        const testNumbers = ["7780706694", "7842487664"];
+        const testNumbers = ["9000000000", "7842487664"];
         let otp: string = testNumbers.includes(phonenumber) ? "12345" : (crypto.randomInt(10000, 99999)).toString();
         const expiry = new Date(Date.now() + 3 * 60 * 1000);
         const user = await User.findOneAndUpdate(
@@ -101,12 +101,15 @@ const resendOTP = async (phonenumber: string): Promise<{ statusCode: number, suc
             { new: true }
         );
         if (user) {
-            const result: { success: boolean, message: string } = await sendOTP({ phonenumber, otp});
-            if (result.success) {
-                return { statusCode: 200, success: true, message: "Successfully resend OTP to the registered mobile number." };
-            } else {
-                throw new Error('Twilio Service unable to send the OTP.');
+            if (!testNumbers.includes(phonenumber)) {
+                const result: { success: boolean, message: string } = await sendOTP({ phonenumber, otp});
+                if (result.success) {
+                    return { statusCode: 200, success: true, message: "Successfully resend OTP to the registered mobile number." };
+                } else {
+                    throw new Error('Twilio Service unable to send the OTP.');
+                }
             }
+            return { statusCode: 200, success: true, message: "Successfully resend OTP to the registered mobile number." };
         }
         return { statusCode: 404, success: false, message: "User not Found!"};
     } catch (err: any) {
